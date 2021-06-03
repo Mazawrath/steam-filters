@@ -13,7 +13,6 @@ def create_connection(path):
     except Error as e:
         print(f"The error '{e}' occurred")
 
-    return connection
 
 def execute_query(query):
     global connection
