@@ -77,5 +77,8 @@ def update_all_games():
     for game in data['applist']['apps']:
         game_info = get_game_info(game['appid'])
         if game_info is not None and game_info['type'] == 'game':
+            genres = []
+            for genre in game_info['genres']:
+                genres.append(genre['description'])
             box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
-            Database.update_game(game['appid'], game_info['name'], game_info['genres'], box_art)
+            Database.update_game(game['appid'], game_info['name'], ",".join(genres), box_art)
