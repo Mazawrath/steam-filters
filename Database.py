@@ -29,7 +29,7 @@ def update_game(app_id, name, genres, box_art):
     global connection
 
     query = """
-    INSERT INTO game_info('appid', 'name')
-    VALUES('%s', '%s')
-    """ % (app_id, name)
+    INSERT INTO game_info('app_id', 'name', 'genres', 'box_art')
+    VALUES('%s', '%s', '%s', '%s')
+    """ % (app_id, name, genres, box_art)
     execute_query(query)
