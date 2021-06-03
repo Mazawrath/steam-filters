@@ -62,7 +62,10 @@ def get_game_info(game_id):
     r = requests.get(url=url, params=params)
     data = r.json()
 
-    return data[str(game_id)]['data']
+    if data[str(game_id)]['success']:
+        return data[str(game_id)]['data']
+    else:
+        return None
 
 
 def update_all_games():
@@ -72,7 +75,7 @@ def update_all_games():
     data = r.json()
     # print(json.dumps(data))
     for game in data['applist']['apps']:
-        print(game)
-        print(get_game_info(game['appid']))
-        time.sleep(5)
-
+        game_info = get_game_info(game['appid'])
+        if game_info is not None and game_info['type'] == 'game':
+            box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
+            Database.update_game(game['appid'], game_info['name'], game_info['genres'], box_art)
