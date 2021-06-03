@@ -2,6 +2,7 @@ import requests
 import Database
 from sys import argv
 import json
+import time
 
 key = argv[1]
 
@@ -73,10 +74,25 @@ def get_games_info(steam_ids, game_ids):
     # game_infos.append([, ])
 
 
+def get_game_info(game_id):
+    game_infos = []
+    url = 'https://store.steampowered.com/api/appdetails?'
+    params = {'appids': game_id}
+    # sending get request and saving the response as response object
+    r = requests.get(url=url, params=params)
+    data = r.json()
+
+    return data[str(game_id)]['data']
+
+
 def update_all_games():
     url = "http://api.steampowered.com/ISteamApps/GetAppList/v0002"
     params = {'key': key}
     r = requests.get(url=url, params=params)
     data = r.json()
-    print(json.dumps(data))
+    # print(json.dumps(data))
+    for game in data['applist']['apps']:
+        print(game)
+        print(get_game_info(game['appid']))
+        time.sleep(5)
 
