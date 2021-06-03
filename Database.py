@@ -1,8 +1,11 @@
 import sqlite3
 from sqlite3 import Error
 
+connection = None
+
 
 def create_connection(path):
+    global connection
     connection = None
     try:
         connection = sqlite3.connect(path)
@@ -12,7 +15,8 @@ def create_connection(path):
 
     return connection
 
-def execute_query(connection, query):
+def execute_query(query):
+    global connection
     cursor = connection.cursor()
     try:
         cursor.execute(query)
