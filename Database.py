@@ -26,4 +26,11 @@ def execute_query(query):
         print(f"The error '{e}' occurred")
 
 
+def update_game(app_id, name, genres, box_art):
+    global connection
 
+    query = """
+    INSERT INTO game_info('appid', 'name')
+    VALUES('%s', '%s')
+    """ % (app_id, name)
+    execute_query(query)
