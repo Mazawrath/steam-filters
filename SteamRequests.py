@@ -54,26 +54,6 @@ def get_related_games(steam_ids, matching_requirement):
     return matching_games
 
 
-def get_games_info(steam_ids, game_ids):
-    game_infos = []
-    url = 'https://store.steampowered.com/api/appdetails?'
-    game_list = ""
-    for game in game_ids:
-        game_list += str(game) + ','
-    game_list = game_list[:-1]
-    print(game_list)
-    params = {'appids': game_list, 'filters': 'basic,price_overview'}
-    # sending get request and saving the response as response object
-    r = requests.get(url=url, params=params)
-    data = r.json()
-    print(json.dumps(data))
-    # if data['type'] != 'game':
-    #     continue
-    # name = data['name']
-
-    # game_infos.append([, ])
-
-
 def get_game_info(game_id):
     game_infos = []
     url = 'https://store.steampowered.com/api/appdetails?'
