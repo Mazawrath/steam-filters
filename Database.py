@@ -27,7 +27,7 @@ def create_connection(path):
         print(f"The error '{e}' occurred")
 
 
-def execute_query(query):
+def __execute_query__(query):
     global connection
     cursor = connection.cursor()
     try:
