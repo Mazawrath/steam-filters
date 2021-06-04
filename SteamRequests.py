@@ -2,7 +2,6 @@ import requests
 import Database
 from sys import argv
 import json
-import time
 
 key = argv[1]
 
@@ -77,8 +76,29 @@ def update_all_games():
     for game in data['applist']['apps']:
         game_info = get_game_info(game['appid'])
         if game_info is not None and game_info['type'] == 'game':
+            categories = []
+            try:
+                for category in game_info['categories']:
+                    categories.append(category['description'])
+            except KeyError:
+                print("Categories not found!\n" + json.dumps(game_info))
             genres = []
-            for genre in game_info['genres']:
-                genres.append(genre['description'])
+            try:
+                for genre in game_info['genres']:
+                    genres.append(genre['description'])
+            except KeyError:
+                print("Categories not found!\n" + json.dumps(game_info))
+            store_link = "https://store.steampowered.com/app/" + str(game['appid']) + "/"
+            launch_link = "steam://rungameid/" + str(game['appid'])
             box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
-            Database.update_game(game['appid'], game_info['name'], ",".join(genres), box_art)
+            Database.update_game(game['appid'], game_info['name'], store_link, launch_link, box_art, ",".join(categories), ",".join(genres))
+
+
+def get_matching_games_info(steam_ids, matching_games):
+    ret_val = {}
+    games_owned = []
+    for steam_id in steam_ids:
+        games_owned.append(get_games_owned(steam_id))
+    for app_id in matching_games:
+        game_info = Database.get_game(app_id)
+        print(game_info)
