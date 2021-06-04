@@ -30,24 +30,33 @@ def get_related_games(steam_ids, matching_requirement):
     matching_games = []
     matching_games_count = []
     player_games = []
+    # Get each player's list of owned games
     for idx, steam_ids in enumerate(steam_ids):
         player_games.append(get_games_owned(steam_ids))
+    # Go through each steam user's list of owned games
     for i in range(len(player_games)):
         for game in player_games[i]:
+            # If a game is not on the matching games list, add it
             if game not in matching_games:
                 matching_games.append(game)
                 matching_games_count.append(1)
+            # If a game is already on the list, increment the count for total users that own the game by 1
             else:
                 location = matching_games.index(game)
                 matching_games_count[location] += 1
 
     idx = 0
+    # Traverse the matching games list until the end is reached
+    # (This while needs to be done since we don't know how long the list will be by the end since any game that is
+    # not owned by enough players is removed
     while idx < len(matching_games_count):
+        # If a game isn't owned by enough players, remove it from the list and look at the same index again
         if matching_games_count[idx] < matching_requirement:
             matching_games.pop(idx)
             matching_games_count.pop(idx)
             if idx != 0:
                 idx -= 1
+        # Game is owned by enough players, go to the next game
         else:
             idx += 1
     return matching_games
@@ -57,7 +66,6 @@ def get_game_info(game_id):
     game_infos = []
     url = 'https://store.steampowered.com/api/appdetails?'
     params = {'appids': game_id}
-    # sending get request and saving the response as response object
     r = requests.get(url=url, params=params)
     data = r.json()
 
@@ -72,9 +80,11 @@ def update_all_games():
     params = {'key': key}
     r = requests.get(url=url, params=params)
     data = r.json()
-    # print(json.dumps(data))
+    # Traverse through every single Steam app
     for game in data['applist']['apps']:
+        # Get detailed info for each app
         game_info = get_game_info(game['appid'])
+        # Only add an app if there is actually data in game_info and it is a game
         if game_info is not None and game_info['type'] == 'game':
             categories = []
             try:
