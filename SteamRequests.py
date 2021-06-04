@@ -62,7 +62,7 @@ def get_game_info(game_id):
     r = requests.get(url=url, params=params)
     data = r.json()
 
-    if data[str(game_id)]['success']:
+    if data is not None and data[str(game_id)]['success']:
         return data[str(game_id)]['data']
     else:
         return None
