@@ -10,6 +10,7 @@ def create_connection(path):
     try:
         connection = sqlite3.connect(path)
         print("Connection to SQLite DB successful")
+
         query = """
         CREATE TABLE IF NOT EXISTS game_info (
           app_id INTEGER PRIMARY KEY,
@@ -21,7 +22,6 @@ def create_connection(path):
           genres VARCHAR(512)
         );
         """
-
         __execute_query__(query)
     except Error as e:
         print(f"The error '{e}' occurred")
