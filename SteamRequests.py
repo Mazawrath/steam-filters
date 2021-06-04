@@ -101,7 +101,12 @@ def update_all_games():
             store_link = "https://store.steampowered.com/app/" + str(game['appid']) + "/"
             launch_link = "steam://rungameid/" + str(game['appid'])
             box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
-            Database.update_game(game['appid'], game_info['name'], store_link, launch_link, box_art, ",".join(categories), ",".join(genres))
+            name = game_info['name']
+            name = name.replace('"', '\'\'')
+            # If a game doesn't have box art, replace it with the next best thing.
+            if requests.get(box_art).status_code != 200:
+                box_art = "https://cdn.akamai.steamstatic.com/steam/apps/" + str(game['appid']) + "/header.jpg"
+            Database.update_game(game['appid'], name, store_link, launch_link, box_art, ",".join(categories), ",".join(genres))
 
 
 def get_matching_games_info(steam_ids, matching_games):
