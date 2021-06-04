@@ -38,7 +38,19 @@ def __execute_query__(query):
         print(f"The error '{e}' occurred")
 
 
-def update_game(app_id, name, genres, box_art):
+def __execute_read_query__(query):
+    global connection
+    cursor = connection.cursor()
+    result = None
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except Error as e:
+        print(f"The error '{e}' occurred")
+
+
+def update_game(app_id, name, store_link, launch_link, box_art, categories, genres):
     global connection
 
     query = """
