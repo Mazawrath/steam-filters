@@ -56,14 +56,14 @@ def update_game(app_id, name, store_link, launch_link, box_art, categories, genr
     # If the game isn't in the database, add it
     if not get_game(app_id):
         query = """
-        INSERT INTO game_info('app_id', 'name', 'store_link', 'launch_link', 'box_art', 'categories', 'genres')
-        VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')
+        INSERT INTO game_info("app_id", "name", "store_link", "launch_link", "box_art", "categories", "genres")
+        VALUES("%s", "%s", "%s", "%s", "%s", "%s", "%s")
         """ % (app_id, name, store_link, launch_link, box_art, categories, genres)
     # Update the game if it's already in the database
     else:
         query = """
               UPDATE game_info
-              SET 'name' = '%s', 'box_art' = '%s', 'categories' = '%s', 'genres' = '%s'
+              SET "name" = "%s", "box_art" = "%s", "categories" = "%s", "genres" = "%s"
               WHERE app_id = %s;
               """ % (name, box_art, categories, genres, app_id)
     print(query)
