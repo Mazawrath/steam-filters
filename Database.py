@@ -54,7 +54,11 @@ def update_game(app_id, name, store_link, launch_link, box_art, categories, genr
     global connection
 
     query = """
-    INSERT INTO game_info('app_id', 'name', 'genres', 'box_art')
-    VALUES('%s', '%s', '%s', '%s')
-    """ % (app_id, name, genres, box_art)
-    execute_query(query)
+    INSERT INTO game_info('app_id', 'name', 'store_link', 'launch_link', 'box_art', 'categories', 'genres')
+    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')
+    """ % (app_id, name, store_link, launch_link, box_art, categories, genres)
+    __execute_query__(query)
+
+
+def get_game(app_id):
+    return __execute_read_query__("SELECT * FROM game_info WHERE app_id = %s;" % app_id)
