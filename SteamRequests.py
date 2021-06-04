@@ -97,7 +97,7 @@ def update_all_games():
                 for genre in game_info['genres']:
                     genres.append(genre['description'])
             except KeyError:
-                print("Categories not found!\n" + json.dumps(game_info))
+                print("Genres not found!\n" + json.dumps(game_info))
             store_link = "https://store.steampowered.com/app/" + str(game['appid']) + "/"
             launch_link = "steam://rungameid/" + str(game['appid'])
             box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
