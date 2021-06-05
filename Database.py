@@ -66,9 +66,22 @@ def update_game(app_id, name, store_link, launch_link, box_art, categories, genr
               SET "name" = "%s", "box_art" = "%s", "categories" = "%s", "genres" = "%s"
               WHERE app_id = %s;
               """ % (name, box_art, categories, genres, app_id)
-    print(query)
     __execute_query__(query)
 
 
 def get_game(app_id):
-    return __execute_read_query__("SELECT * FROM game_info WHERE app_id = %s;" % app_id)
+    ret_val = __execute_read_query__("SELECT * FROM game_info WHERE app_id = %s;" % app_id)
+    if ret_val:
+        ret_val = ret_val[0]
+        ret_val = {
+            "app_id": ret_val[0],
+            "name": ret_val[1],
+            "store_link": ret_val[2],
+            "launch_link": ret_val[3],
+            "box_art": ret_val[4],
+            "categories": ret_val[5].split(","),
+            "genres": ret_val[6].split(",")
+        }
+        return ret_val
+    else:
+        return None
