@@ -152,6 +152,16 @@ def get_matching_games_info(steam_ids, matching_games):
         if not game_info:
             print(str(app_id) + " not found!")
             continue
+
+        # Create a list of every category, if any aren't in there, add them
+        for category in game_info['categories']:
+            if category not in ret_val['categories']:
+                ret_val['categories'].append(category)
+        # Create a list of every genre, if any aren't in there, add them
+        for genre in game_info['genres']:
+            if genre not in ret_val['genres']:
+                ret_val['genres'].append(genre)
+
         # Game not found in database, try to find it
         # if not game_info:
         ret_info = {
