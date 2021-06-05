@@ -124,7 +124,7 @@ def __update_database__(game_info):
                          ",".join(genres))
 
 
-def update_all_games():
+def update_games(update_existing):
     url = "http://api.steampowered.com/ISteamApps/GetAppList/v0002"
     params = {'key': key}
     r = requests.get(url=url, params=params)
@@ -133,6 +133,9 @@ def update_all_games():
     # Traverse through every single Steam app
     for game in data['applist']['apps']:
         print(game)
+        if update_existing and not get_game_info(game['appid']):
+            print("Game already exists!")
+            continue
         # Get detailed info for each app
         game_info = get_game_info(game['appid'])
         # Only add an app if there is actually data in game_info and it is a game or mod
