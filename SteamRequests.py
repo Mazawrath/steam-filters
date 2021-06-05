@@ -2,6 +2,7 @@ import requests
 import Database
 from sys import argv
 import json
+from time import sleep
 
 key = argv[1]
 
@@ -9,8 +10,16 @@ key = argv[1]
 def get_steam_id(vanity_url):
     url = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/"
     params = {'key': key, "vanityurl": vanity_url}
-    r = requests.get(url=url, params=params)
-    data = r.json()
+    attempts = 0
+    while attempts <= 10:
+        response = requests.get(url=url, params=params)
+        if response.status_code == 200:
+            break
+        else:
+            print("(Likely) rate limited!")
+            attempts += 1
+            sleep(90)
+    data = response.json()
     return data['response']['steamid']
 
 
@@ -19,8 +28,16 @@ def get_games_owned(steam_id):
     url = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/"
     params = {'key': key, "steamid": steam_id, 'include_appinfo': False,
               'include_played_free_games': True, }
-    r = requests.get(url=url, params=params)
-    data = r.json()
+    attempts = 0
+    while attempts <= 10:
+        response = requests.get(url=url, params=params)
+        if response.status_code == 200:
+            break
+        else:
+            print("(Likely) rate limited!")
+            attempts += 1
+            sleep(90)
+    data = response.json()
     for game_data in data['response']['games']:
         ret_var.append(game_data['appid'])
     return ret_var
@@ -66,8 +83,16 @@ def get_game_info(game_id):
     game_infos = []
     url = 'https://store.steampowered.com/api/appdetails?'
     params = {'appids': game_id}
-    r = requests.get(url=url, params=params)
-    data = r.json()
+    attempts = 0
+    while attempts <= 10:
+        response = requests.get(url=url, params=params)
+        if response.status_code == 200:
+            break
+        else:
+            print("(Likely) rate limited!")
+            attempts += 1
+            sleep(90)
+    data = response.json()
 
     if data is not None and data[str(game_id)]['success']:
         return data[str(game_id)]['data']
