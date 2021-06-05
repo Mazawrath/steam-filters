@@ -135,8 +135,8 @@ def update_all_games():
         print(game)
         # Get detailed info for each app
         game_info = get_game_info(game['appid'])
-        # Only add an app if there is actually data in game_info and it is a game
-        if game_info and game_info['type'] == 'game':
+        # Only add an app if there is actually data in game_info and it is a game or mod
+        if game_info and (game_info['type'] == 'game' or game_info['type'] == 'mod'):
             __update_database__(game_info)
 
 
