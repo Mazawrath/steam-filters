@@ -85,28 +85,28 @@ def update_all_games():
         # Get detailed info for each app
         game_info = get_game_info(game['appid'])
         # Only add an app if there is actually data in game_info and it is a game
-        if game_info is not None and game_info['type'] == 'game':
+        if game_info and game_info['type'] == 'game':
             categories = []
-            try:
+            if 'categories' in game_info:
                 for category in game_info['categories']:
                     categories.append(category['description'])
-            except KeyError:
+            else:
                 print("Categories not found!\n" + json.dumps(game_info))
             genres = []
-            try:
+            if 'genres' in game_info:
                 for genre in game_info['genres']:
                     genres.append(genre['description'])
-            except KeyError:
+            else:
                 print("Genres not found!\n" + json.dumps(game_info))
+            name = game_info['name'].replace('"', '\'\'')
             store_link = "https://store.steampowered.com/app/" + str(game['appid']) + "/"
             launch_link = "steam://rungameid/" + str(game['appid'])
             box_art = "https://steamcdn-a.akamaihd.net/steam/apps/" + str(game['appid']) + "/library_600x900_2x.jpg"
-            name = game_info['name']
-            name = name.replace('"', '\'\'')
             # If a game doesn't have box art, replace it with the next best thing.
             if requests.get(box_art).status_code != 200:
                 box_art = "https://cdn.akamai.steamstatic.com/steam/apps/" + str(game['appid']) + "/header.jpg"
-            Database.update_game(game['appid'], name, store_link, launch_link, box_art, ",".join(categories), ",".join(genres))
+            Database.update_game(game['appid'], name, store_link, launch_link, box_art, ",".join(categories),
+                                 ",".join(genres))
 
 
 def get_matching_games_info(steam_ids, matching_games):
