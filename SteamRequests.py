@@ -146,7 +146,7 @@ def update_games(update_existing):
 def get_matching_games_info(steam_ids, matching_games):
     games_owned = []
 
-    ret_val = {"categories": [], "games": []}
+    ret_val = {"categories": [], "genres": [], "games": []}
 
     for steam_id in steam_ids:
         games_owned.append(get_games_owned(steam_id))
