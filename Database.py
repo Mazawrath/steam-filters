@@ -11,6 +11,7 @@ def create_connection(path):
         connection = sqlite3.connect(path)
         print("Connection to SQLite DB successful")
 
+        # Create the basic table if it doesn't already exist.
         query = """
         CREATE TABLE IF NOT EXISTS game_info (
           app_id INTEGER PRIMARY KEY,
