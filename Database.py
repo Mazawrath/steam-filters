@@ -85,4 +85,4 @@ def get_game(app_id):
         }
         return ret_val
     else:
-        return None
+        return []
