@@ -100,7 +100,7 @@ def get_game_info(game_id):
         return None
 
 
-def __update_database__(game_info):
+def get_game_database_format(game_info):
     categories = []
     if 'categories' in game_info:
         for category in game_info['categories']:
@@ -120,8 +120,16 @@ def __update_database__(game_info):
     # If a game doesn't have box art, replace it with the next best thing.
     if requests.get(box_art).status_code != 200:
         box_art = "https://cdn.akamai.steamstatic.com/steam/apps/" + str(game_info['steam_appid']) + "/header.jpg"
-    Database.update_game(game_info['steam_appid'], name, store_link, launch_link, box_art, ",".join(categories),
-                         ",".join(genres))
+
+    return {
+        "app_id": game_info['steam_appid'],
+        "name": name,
+        "store_link": store_link,
+        "launch_link": launch_link,
+        "box_art": box_art,
+        "categories": ",".join(categories),
+        "genres": ",".join(genres)
+    }
 
 
 def update_games(update_existing):
@@ -133,14 +141,20 @@ def update_games(update_existing):
     # Traverse through every single Steam app
     for game in data['applist']['apps']:
         print(game)
-        if update_existing and not get_game_info(game['appid']):
-            print("Game already exists!")
+        if update_existing and Database.get_game(game['appid']):
+            print("App is already in database!")
             continue
+        else:
+            print("App is not in database!")
+
         # Get detailed info for each app
         game_info = get_game_info(game['appid'])
         # Only add an app if there is actually data in game_info
         if game_info:
-            __update_database__(game_info)
+            database_info = get_game_database_format(game_info)
+            Database.update_game(database_info["app_id"], database_info["name"], database_info["store_link"],
+                                 database_info["launch_link"], database_info["box_art"], database_info["categories"],
+                                 database_info["categories"])
 
 
 def get_matching_games_info(steam_ids, matching_games):
