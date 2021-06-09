@@ -166,12 +166,18 @@ def get_matching_games_info(steam_ids, matching_games):
         games_owned.append(get_games_owned(steam_id))
     for app_id in matching_games:
         game_info = Database.get_game(app_id)
+        player_owns_game = []
+        vr_support = False
+
         if not game_info:
             print(str(app_id) + " not found!")
             continue
 
         # Create a list of every category, if any aren't in there, add them
         for category in game_info['categories']:
+            # Check for VR flag
+            if category == "VR Support":
+                vr_support = True
             if category not in ret_val['categories']:
                 ret_val['categories'].append(category)
         # Create a list of every genre, if any aren't in there, add them
@@ -188,7 +194,9 @@ def get_matching_games_info(steam_ids, matching_games):
             "launch_link": game_info['launch_link'],
             "box_art": game_info['box_art'],
             "categories": game_info['categories'],
-            "genres": game_info['genres']
+            "genres": game_info['genres'],
+            "vr_support": vr_support,
+            "users_own": player_owns_game
         }
         ret_val["games"].append(ret_info)
 
