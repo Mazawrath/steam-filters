@@ -185,6 +185,13 @@ def get_matching_games_info(steam_ids, matching_games):
             if genre not in ret_val['genres']:
                 ret_val['genres'].append(genre)
 
+        # Figure out each player that owns the game
+        for i in range(len(steam_ids)):
+            if game_info['app_id'] in games_owned[i]:
+                player_owns_game.append({steam_ids[i]: True})
+            else:
+                player_owns_game.append({steam_ids[i]: False})
+
         # Game not found in database, try to find it
         # if not game_info:
         ret_info = {
