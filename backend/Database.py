@@ -1,14 +1,10 @@
 import sqlite3
 from sqlite3 import Error
 
-connection = None
 
-
-def create_connection(path):
-    global connection
-    connection = None
+def generate_database(path):
     try:
-        connection = sqlite3.connect(path)
+        sqlite3.connect(path)
         print("Connection to SQLite DB successful")
 
         # Create the basic table if it doesn't already exist.
@@ -29,7 +25,7 @@ def create_connection(path):
 
 
 def __execute_query__(query):
-    global connection
+    connection = sqlite3.connect("steam_games")
     cursor = connection.cursor()
     try:
         cursor.execute(query)
@@ -40,7 +36,7 @@ def __execute_query__(query):
 
 
 def __execute_read_query__(query):
-    global connection
+    connection = sqlite3.connect("steam_games")
     cursor = connection.cursor()
     result = None
     try:
@@ -52,7 +48,7 @@ def __execute_read_query__(query):
 
 
 def update_game(app_id, name, store_link, launch_link, box_art, categories, genres):
-    global connection
+    connection = sqlite3.connect("steam_games")
 
     # If the game isn't in the database, add it
     if not get_game(app_id):
