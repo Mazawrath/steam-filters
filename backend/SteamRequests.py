@@ -127,8 +127,8 @@ def get_game_database_format(game_info):
         "store_link": store_link,
         "launch_link": launch_link,
         "box_art": box_art,
-        "categories": ",".join(categories),
-        "genres": ",".join(genres)
+        "categories": categories,
+        "genres": genres
     }
 
 
@@ -153,8 +153,8 @@ def update_games(update_existing):
         if game_info:
             database_info = get_game_database_format(game_info)
             Database.update_game(database_info["app_id"], database_info["name"], database_info["store_link"],
-                                 database_info["launch_link"], database_info["box_art"], database_info["categories"],
-                                 database_info["categories"])
+                                 database_info["launch_link"], database_info["box_art"], ",".join(database_info["categories"]),
+                                 ",".join(database_info["categories"]))
 
 
 def get_matching_games_info(steam_ids, matching_games):
@@ -171,7 +171,13 @@ def get_matching_games_info(steam_ids, matching_games):
 
         if not game_info:
             print(str(app_id) + " not found!")
-            continue
+            # Try to fetch the required data on the spot
+            game_info = get_game_info(app_id)
+            # Check if getting game info actually returned anything, if it did use that info, else go to the next app
+            if game_info:
+                game_info = get_game_database_format(game_info)
+            else:
+                continue
 
         # Create a list of every category, if any aren't in there, add them
         for category in game_info['categories']:
