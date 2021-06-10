@@ -186,6 +186,12 @@ def get_matching_games_info():
             # Check if getting game info actually returned anything, if it did use that info, else go to the next app
             if game_info:
                 game_info = get_game_database_format(game_info)
+
+                # Add the game to the database so this doesn't need to be done again.
+                Database.update_game(game_info["app_id"], game_info["name"], game_info["store_link"],
+                                     game_info["launch_link"], game_info["box_art"],
+                                     ",".join(game_info["categories"]),
+                                     ",".join(game_info["categories"]))
             else:
                 continue
 
