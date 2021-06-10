@@ -3,6 +3,7 @@ import Database
 from sys import argv
 import json
 from time import sleep
+from flask import request
 
 key = argv[1]
 
@@ -153,14 +154,23 @@ def update_games(update_existing):
         if game_info:
             database_info = get_game_database_format(game_info)
             Database.update_game(database_info["app_id"], database_info["name"], database_info["store_link"],
-                                 database_info["launch_link"], database_info["box_art"], ",".join(database_info["categories"]),
+                                 database_info["launch_link"], database_info["box_art"],
+                                 ",".join(database_info["categories"]),
                                  ",".join(database_info["categories"]))
 
 
-def get_matching_games_info(steam_ids, matching_games):
+def get_matching_games_info():
+    vanity_urls = request.args.getlist('vanity_urls')
+    matching_games_total = int(request.args.get('matching_games_total'))
     games_owned = []
+    steam_ids = []
+
+    for vanity_url in vanity_urls:
+        steam_ids.append(get_steam_id(vanity_url))
 
     ret_val = {"categories": [], "genres": [], "games": []}
+
+    matching_games = get_related_games(steam_ids, matching_games_total)
 
     for steam_id in steam_ids:
         games_owned.append(get_games_owned(steam_id))
