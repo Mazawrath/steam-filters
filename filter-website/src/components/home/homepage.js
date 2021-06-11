@@ -1,4 +1,3 @@
-import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -10,8 +9,6 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Alert from 'react-bootstrap/Alert'
-
-import Home from './components/home/homepage'
 
 const NavBar = () => {
   return (
@@ -109,14 +106,24 @@ class SteamForm extends React.Component {
 
 
 
-function App() {
+export default function Home() {
   return (
-    <div>
+    <>
+      <NavBar></NavBar>
       <div className="wrapper">
-        <Home></Home>
+      <BrowserRouter>
+      <Switch>
+          <Route path="/">
+          <Container className="p-3">
+            <Jumbotron>
+              <AlertDismissibleExample></AlertDismissibleExample>
+            <SteamForm></SteamForm>
+            </Jumbotron>
+          </Container>
+          </Route>
+        </Switch>
+      </BrowserRouter>
       </div>
-    </div>
+    </>
   );
 }
-
-export default App;
