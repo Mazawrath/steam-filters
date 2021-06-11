@@ -9,7 +9,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 
-function NavBar() {
+const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
   <Navbar.Brand href="#home">Steam Filters</Navbar.Brand>
@@ -31,7 +31,15 @@ function NavBar() {
   );
 }
 
+const Row = function(key) {
+  return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId" + key} />
+}
+
 class SteamForm extends React.Component {
+  state = {
+    numChildren: 1
+  }
+
   handleSubmit(event) {
     const formData = new FormData(event.target),
     formDataObj = Object.fromEntries(formData.entries())
@@ -45,22 +53,31 @@ class SteamForm extends React.Component {
     alert("Cool letter! " +  event.target.value);
   }
 
+  addChild() {
+    this.setState({
+      numChildren: this.state.numChildren + 1
+    });
+  }
+
   render() {
+    const steamIdFields = []
+
+    for (var i = 0; i < this.state.numChildren; i++) {
+      steamIdFields.push(<Row key={i} number={i} />);
+    };
+
     return( 
       <>
       <form onSubmit={this.handleSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Steam Vanity URL</Form.Label>
-      {/* <Form.Control type="text" placeholder="Enter your Steam vanity URL" onChange={this.onInput} /> */}
-      <Form.Control type="text" placeholder="Enter your Steam vanity URL" name="steamId" />
-      {/* <Form.Text className="text-muted">
-        Insert cool things to say here
-      </Form.Text> */}
+        {steamIdFields}
     </Form.Group>
         <Button type='submit'>Nice button!</Button>
+        <Button type='button' onClick={() => this.addChild()}>Add friend</Button>
       </form>
       </>
-    )
+    );
   }
 }
 
