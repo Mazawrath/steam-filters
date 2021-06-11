@@ -1,5 +1,6 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
@@ -8,6 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import Alert from 'react-bootstrap/Alert'
 
 const NavBar = () => {
   return (
@@ -31,13 +33,28 @@ const NavBar = () => {
   );
 }
 
-const Row = function(key) {
-  return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId" + key} />
+function AlertDismissibleExample() {
+    return (
+      <Alert variant="danger" >
+        <Alert.Heading>User not found!</Alert.Heading>
+        <p>
+          One or more Steam users were not found! Please double check the marked fields.
+        </p>
+      </Alert>
+    );
+}
+
+const Row = function() {
+  return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput()} />
 }
 
 class SteamForm extends React.Component {
   state = {
-    numChildren: 1
+    numChildren: 0
+  }
+
+  Row = function() {
+    return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput() } required isInvalid />
   }
 
   handleSubmit(event) {
@@ -49,9 +66,12 @@ class SteamForm extends React.Component {
     event.preventDefault();
   }
 
-  onInput(event) {
-    alert("Cool letter! " +  event.target.value);
-  }
+  // onInput(event) {
+  //   alert("Cool letter! ");
+  //   this.setState({
+  //     numChildren: this.state.numChildren + 1
+  //   });
+  // }
 
   addChild() {
     this.setState({
@@ -63,7 +83,7 @@ class SteamForm extends React.Component {
     const steamIdFields = []
 
     for (var i = 0; i < this.state.numChildren; i++) {
-      steamIdFields.push(<Row key={i} number={i} />);
+      steamIdFields.push(<Row key={i}/>);
     };
 
     return( 
@@ -71,6 +91,10 @@ class SteamForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Steam Vanity URL</Form.Label>
+      {/* <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput()} /> */}
+      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId1"} />
+      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId2"} />
+      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId3"} />
         {steamIdFields}
     </Form.Group>
         <Button type='submit'>Nice button!</Button>
@@ -81,15 +105,26 @@ class SteamForm extends React.Component {
   }
 }
 
+
+
 function App() {
   return (
     <div>
-    <NavBar></NavBar>
-    <Container className="p-3">
-      <Jumbotron>
-      <SteamForm></SteamForm>
-      </Jumbotron>
-    </Container>
+      <NavBar></NavBar>
+      <div className="wrapper">
+      <BrowserRouter>
+      <Switch>
+          <Route path="/">
+          <Container className="p-3">
+            <Jumbotron>
+              <AlertDismissibleExample></AlertDismissibleExample>
+            <SteamForm></SteamForm>
+            </Jumbotron>
+          </Container>
+          </Route>
+        </Switch>
+      </BrowserRouter>
+      </div>
     </div>
   );
 }
