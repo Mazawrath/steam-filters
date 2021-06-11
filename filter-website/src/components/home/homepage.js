@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert'
 
+import GraphicDeisgn from '../../assests/graphicdesign.jpg'
+
 function AlertDismissibleExample() {
     return (
       <Alert variant="danger" >
@@ -89,6 +91,7 @@ export default function Home() {
         <SteamForm></SteamForm>
         </Jumbotron>
         </Container>
+        <marquee direction="right" scrolldelay="60"><img src={GraphicDeisgn} height="300"></img></marquee>
     </div>
   );
 }
