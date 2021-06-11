@@ -111,11 +111,16 @@ class SteamForm extends React.Component {
 
 function App() {
   return (
-    <div>
-      <div className="wrapper">
+    <>
+      <NavBar></NavBar>
+      <BrowserRouter>
+      <Switch>
+          <Route path="/">
         <Home></Home>
-      </div>
-    </div>
+      </Route>
+      </Switch>
+      </BrowserRouter>
+    </>
   );
 }
 

@@ -108,22 +108,13 @@ class SteamForm extends React.Component {
 
 export default function Home() {
   return (
-    <>
-      <NavBar></NavBar>
-      <div className="wrapper">
-      <BrowserRouter>
-      <Switch>
-          <Route path="/">
-          <Container className="p-3">
-            <Jumbotron>
-              <AlertDismissibleExample></AlertDismissibleExample>
-            <SteamForm></SteamForm>
-            </Jumbotron>
-          </Container>
-          </Route>
-        </Switch>
-      </BrowserRouter>
-      </div>
-    </>
+    <div className="wrapper">
+        <Container className="p-3">
+        <Jumbotron>
+            <AlertDismissibleExample></AlertDismissibleExample>
+        <SteamForm></SteamForm>
+        </Jumbotron>
+        </Container>
+    </div>
   );
 }
