@@ -9,32 +9,36 @@ import Alert from 'react-bootstrap/Alert'
 import GraphicDeisgn from '../../assests/graphicdesign.jpg'
 
 function AlertDismissibleExample(props) {
-    const isError = props.isError;
+  const isError = props.isError;
 
-    if (isError) {
+  if (isError) {
     return (
-      <Alert variant="danger" >
-        <Alert.Heading>User not found!</Alert.Heading>
-        <p>
-          One or more Steam users were not found! Please double check the marked fields.
-        </p>
-      </Alert>
+        <Alert variant="danger" >
+          <Alert.Heading>User not found!</Alert.Heading>
+          <p>
+            One or more Steam users were not found! Please double check the marked fields.
+          </p>
+        </Alert>
     );
-    } else
-    return <></>
+  }
+  else {
+    return <> </>
+  }
 }
 
 class SteamForm extends React.Component {
   state = {
-    numChildren: 1
+    numChildren: 1,
+    isError: false
   }
 
   handleSubmit(event) {
     const formData = new FormData(event.target),
     formDataObj = Object.fromEntries(formData.entries())
-    console.log(formDataObj)
 
-    AlertDismissibleExample.isError = true
+    this.setState({
+      isError: true
+    });
 
     alert('wow, such a cool button!' + formDataObj.steamId_1);
     event.preventDefault();
@@ -45,7 +49,6 @@ class SteamForm extends React.Component {
   onInput(event) {
     const formData = new FormData(event.target),
     formDataObj = Object.fromEntries(formData.entries())
-    console.log(formDataObj)
 
     this.setState({
       numChildren: this.state.numChildren + 1
@@ -62,11 +65,12 @@ class SteamForm extends React.Component {
     const steamIdFields = []
 
     for (var i = 0; i < this.state.numChildren; i++) {
-      steamIdFields.push(<Form.Control rol type="text" placeholder="Enter your Steam vanity URL" name={"steamId_" + i} onChange={() => this.onInput(this)} />);
+      steamIdFields.push(<Form.Control rol type="text" placeholder="Enter your Steam vanity URL" name={"steamId_" + i} onChange={() => this.onInput(this)} key={i} />);
     };
 
     return( 
       <>
+      <AlertDismissibleExample isError={this.state.isError} />
       <form onSubmit={() => this.handleSubmit(this)}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Steam Vanity URL</Form.Label>
@@ -88,7 +92,6 @@ export default function Home() {
         <Container className="p-3">
         <Jumbotron>
           <h1>Enter your Steam vanity URL and your friends vanity URLs</h1>
-            <AlertDismissibleExample></AlertDismissibleExample>
         <SteamForm></SteamForm>
         </Jumbotron>
         </Container>
