@@ -8,7 +8,10 @@ import Alert from 'react-bootstrap/Alert'
 
 import GraphicDeisgn from '../../assests/graphicdesign.jpg'
 
-function AlertDismissibleExample() {
+function AlertDismissibleExample(props) {
+    const isError = props.isError;
+
+    if (isError) {
     return (
       <Alert variant="danger" >
         <Alert.Heading>User not found!</Alert.Heading>
@@ -17,19 +20,13 @@ function AlertDismissibleExample() {
         </p>
       </Alert>
     );
-}
-
-const Row = function() {
-  return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput()} />
+    } else
+    return <></>
 }
 
 class SteamForm extends React.Component {
   state = {
-    numChildren: 0
-  }
-
-  Row = function() {
-    return <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput() } required isInvalid />
+    numChildren: 1
   }
 
   handleSubmit(event) {
@@ -37,16 +34,23 @@ class SteamForm extends React.Component {
     formDataObj = Object.fromEntries(formData.entries())
     console.log(formDataObj)
 
-    alert('wow, such a cool button!' + formDataObj.steamId);
+    AlertDismissibleExample.isError = true
+
+    alert('wow, such a cool button!' + formDataObj.steamId_1);
     event.preventDefault();
+
+    this.props.history.push('/thank-you');
   }
 
-  // onInput(event) {
-  //   alert("Cool letter! ");
-  //   this.setState({
-  //     numChildren: this.state.numChildren + 1
-  //   });
-  // }
+  onInput(event) {
+    const formData = new FormData(event.target),
+    formDataObj = Object.fromEntries(formData.entries())
+    console.log(formDataObj)
+
+    this.setState({
+      numChildren: this.state.numChildren + 1
+    });
+  }
 
   addChild() {
     this.setState({
@@ -58,19 +62,15 @@ class SteamForm extends React.Component {
     const steamIdFields = []
 
     for (var i = 0; i < this.state.numChildren; i++) {
-      steamIdFields.push(<Row key={i}/>);
+      steamIdFields.push(<Form.Control rol type="text" placeholder="Enter your Steam vanity URL" name={"steamId_" + i} onChange={() => this.onInput(this)} />);
     };
 
     return( 
       <>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={() => this.handleSubmit(this)}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
       <Form.Label>Steam Vanity URL</Form.Label>
-      {/* <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId"} onChange={() => this.onInput()} /> */}
-      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId1"} />
-      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId2"} />
-      <Form.Control type="text" placeholder="Enter your Steam vanity URL" id={"steamId3"} />
-        {steamIdFields}
+      {steamIdFields}
     </Form.Group>
         <Button type='submit'>Nice button!</Button>
         <Button type='button' onClick={() => this.addChild()}>Add friend</Button>
@@ -87,11 +87,12 @@ export default function Home() {
     <div className="wrapper">
         <Container className="p-3">
         <Jumbotron>
+          <h1>Enter your Steam vanity URL and your friends vanity URLs</h1>
             <AlertDismissibleExample></AlertDismissibleExample>
         <SteamForm></SteamForm>
         </Jumbotron>
         </Container>
-        <marquee direction="right" scrolldelay="60"><img src={GraphicDeisgn} height="300"></img></marquee>
+        <marquee direction="right" scrolldelay="60"><img src={GraphicDeisgn} height="300" /></marquee>
     </div>
   );
 }
