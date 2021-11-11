@@ -47,12 +47,17 @@ class SteamForm extends React.Component {
   }
 
   onInput(event) {
-    const formData = new FormData(event.target),
-    formDataObj = Object.fromEntries(formData.entries())
-
-    this.setState({
-      numChildren: this.state.numChildren + 1
-    });
+    var field_text = event.target.value
+    
+    if (field_text.length === 1) {
+      this.setState({
+        numChildren: this.state.numChildren + 1
+      });
+    } else if (field_text.length === 0) {
+      this.setState({
+        numChildren: this.state.numChildren - 1
+      });
+    }
   }
 
   addChild() {
@@ -65,7 +70,7 @@ class SteamForm extends React.Component {
     const steamIdFields = []
 
     for (var i = 0; i < this.state.numChildren; i++) {
-      steamIdFields.push(<Form.Control rol type="text" placeholder="Enter your Steam vanity URL" name={"steamId_" + i} onChange={() => this.onInput(this)} key={i} />);
+      steamIdFields.push(<Form.Control rol type="text" placeholder="Enter your Steam vanity URL" name={"steamId_" + i} onChange={(event) => this.onInput(event)} key={i} />);
     };
 
     return( 
